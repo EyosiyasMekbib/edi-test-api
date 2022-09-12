@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 import requests
-import xmltodict, json
+import xmltodict
+import json
 
 app = FastAPI()
 
@@ -32,7 +33,6 @@ def xml_extractor(links):
        
     return return_value
 
-@app.get("/get_purchase_orders")
+@app.get("/")
 async def get_purchase_orders():
     return xml_extractor(api_urls)
-    
