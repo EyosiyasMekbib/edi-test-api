@@ -40,7 +40,7 @@ async def get_purchase_orders():
     return xml_extractor(api_urls)
 
 @app.get("/get_po/")
-async def get_purchase_orders(link:str):
+async def get_purchase_order(link:str):
     link = [link]
     return xml_extractor(link)
 
