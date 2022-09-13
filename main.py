@@ -2,6 +2,7 @@ from fastapi import FastAPI
 import requests
 import xmltodict
 import json
+from pydantic import BaseModel
 
 app = FastAPI()
 
@@ -18,6 +19,7 @@ api_urls = [
     "https://www.mymxp.com/x/?9F8DB2899D2F4DC58E01A18EDABC8993",
     "https://www.mymxp.com/x/?6D38E6E5E56F4A6282CD152B6E24BACB"
 ]
+
 
 def xml_extractor(links):
     return_value = []
@@ -36,3 +38,12 @@ def xml_extractor(links):
 @app.get("/")
 async def get_purchase_orders():
     return xml_extractor(api_urls)
+
+@app.get("/get_po/")
+async def get_purchase_orders(link:str):
+    link = [link]
+    return xml_extractor(link)
+
+
+
+
