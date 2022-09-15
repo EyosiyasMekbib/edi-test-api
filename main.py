@@ -3,6 +3,8 @@ import requests
 import xmltodict
 import json
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
 
 app = FastAPI()
 
@@ -21,6 +23,16 @@ api_urls = [
 ]
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 def xml_extractor(links):
     return_value = []
     for link in links:
@@ -29,11 +41,14 @@ def xml_extractor(links):
         xml_link = f"https://www.mymxp.com/cgi-bin/ExportDoc.exe/POInterfaceFile{code}&XML"
 
         response = requests.get(xml_link)
-        data_dict = xmltodict.parse(response.text)
-        
+
+        data_dict = xmltodict.parse(response.text) 
         return_value.append(data_dict)
-       
     return return_value
+
+
+
+
 
 @app.get("/")
 async def get_purchase_orders():
