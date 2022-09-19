@@ -1,3 +1,4 @@
+from sqlite3 import Row
 from fastapi import FastAPI
 import requests
 import xmltodict
@@ -32,7 +33,6 @@ app.add_middleware(
 )
 
 
-
 def xml_extractor(links):
     return_value = []
     for link in links:
@@ -42,12 +42,21 @@ def xml_extractor(links):
 
         response = requests.get(xml_link)
 
-        data_dict = xmltodict.parse(response.text) 
+        data_dict = xmltodict.parse(response.text)
+        data_dict = data_dict['DATAPACKET']['ROWDATA']
+
+        for x in data_dict['ROW']:
+            if type(x) == dict:
+                for key in x:
+                    print(key)
+                    print(type(key))
+                    key.replace("@","x")
+                    print(key)
+                
+    
+        # print(data_dict)
         return_value.append(data_dict)
     return return_value
-
-
-
 
 
 @app.get("/")
