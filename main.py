@@ -47,6 +47,8 @@ def xml_extractor(links):
         data_dict = data_dict['DATAPACKET']['ROWDATA']['ROW']
         attribute = ["@Company","@Destination","@PO_Number","@Line_Number","@Item_Code","@Item_Description","@Specification","@General_Spec","@Quality_Spec","@Packing_Specification","@Unit","@Quantity","@Unit_Cost","@Total_Cost","@Comment_By_Purchasing","@Manufacturer_Name","@Manufacturer_Ref_No","@Supplier_Nbr","@GLAccountName","@LineGUID","@PO_Login_Code","@ClientID","@Delivery_Place","@Delivery_Date","@Deliver_Goods_By","@Shipment_Quantity"]
 
+        
+
         counter = 0
 
         while counter < len(attribute):
@@ -57,7 +59,11 @@ def xml_extractor(links):
 
 
         return_value.append(data_dict)
-
+    
+    po_head_code = f"{code[1:9]}-{code[9:13]}-{code[13:17]}-{code[17:21]}-{code[21:]}"
+    po_head_response = requests.get(f"https://test.mymxp.com/x/MXP_ECom_ISAPI.dll/MW/QuoteDetail/PurchaseOrderHead?_dc=1663656477193&firstrow=true&documentID=%7B{po_head_code}%7D&")
+    po_head_dict = json.loads(po_head_response.text)
+    data_dict.append(po_head_dict["data"])
     return return_value
 
 
